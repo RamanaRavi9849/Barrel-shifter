@@ -1,0 +1,37 @@
+`timescale 1ns / 1ps
+
+
+
+module barrel_shifter_t( );
+
+    reg  [7:0] data_in;
+    reg  [2:0] shift_amt;
+    reg  [2:0] mode_sel;
+    wire [7:0] data_out;
+
+   barrel_shifter uut (
+        .data_in(data_in),
+        .shift_amt(shift_amt),
+        .mode_sel(mode_sel),
+        .data_out(data_out)
+    );
+
+    initial begin
+        $display("Time | Mode | Shift | Input    | Output");
+        $monitor("%4t |  %03b  |   %0d   | %b | %b", $time, mode_sel, shift_amt, data_in, data_out);
+
+        data_in = 8'b11010010;
+       
+        mode_sel = 3'b000; shift_amt = 3'd2; #10; // LSL
+        mode_sel = 3'b001; shift_amt = 3'd2; #10; // LSR
+        mode_sel = 3'b010; shift_amt = 3'd2; #10; // ASR
+        mode_sel = 3'b011; shift_amt = 3'd2; #10; // ROR
+        mode_sel = 3'b100; shift_amt = 3'd2; #10; // ROL
+
+        // More test
+        data_in = 8'b10110011; shift_amt = 3'd3; mode_sel = 3'b100; #10; // ROL
+
+        $finish;
+    end
+
+endmodule
